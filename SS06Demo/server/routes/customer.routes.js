@@ -1,0 +1,32 @@
+import { Router } from "express";
+import { requireApiKey } from "../middlewares/apikey.js";
+import { 
+    getAllCustomers, 
+    getCustomerById, 
+    getCustomerOrders, 
+    createCustomer, 
+    deleteCustomer, 
+    getApikey 
+} from "../controllers/customer.controller.js";
+
+const r = Router();
+
+//(0) Public Routes API key
+r.get("/getApikey/:id", getApikey);
+
+// GET /customers - Lấy tất cả khách hàng
+r.get("/", requireApiKey, getAllCustomers);
+
+// GET /customers/:id - Lấy thông tin chi tiết của một khách hàng
+r.get("/:id",requireApiKey, getCustomerById);
+
+// GET /customers/:customerId/orders - Lấy danh sách đơn hàng của một khách hàng
+r.get("/:customerId/orders",requireApiKey, getCustomerOrders);
+
+// POST /customers - Thêm mới khách hàng
+r.post("/", createCustomer);
+
+// DELETE /customers/:id - Xóa khách hàng
+r.delete("/:id", deleteCustomer);
+
+export default r;
