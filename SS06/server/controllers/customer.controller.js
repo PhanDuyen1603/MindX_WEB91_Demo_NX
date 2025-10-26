@@ -1,6 +1,25 @@
 import Customer from "../models/Customer.js";
+import crypto from "crypto";
 import Order from "../models/Order.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+
+// (0) GET /customers/getApikey/:id
+export const getApiKey = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  // 1) Tìm theo id (string "c1" ...), KHÔNG phải _id
+  const customer = await Customer.findOne({ id });
+  if (!customer) return res.status(404).json({ message: "Customer not found" });
+
+  // 2) Nếu chưa có rand thì sinh mới và lưu vào DB
+  if (!customer.apiKeyRand) {
+    customer.apiKeyRand = crypto.randomBytes(6).toString("hex"); // 12 ký tự hex
+    await customer.save();
+  }
+
+  // 3) Lắp key theo format đề bài
+  const apiKey = `web-$${customer.id}$-$${customer.email}$-$${customer.apiKeyRand}$`;
+  res.json({ apiKey });
+});
 
 // Câu 01: Lấy tất cả khách hàng
 export const getAllCustomers = asyncHandler(async (_req, res) => {
