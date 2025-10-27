@@ -25,9 +25,9 @@ r.get("/:id", requireApiKey, getCustomerById);
 r.get("/:customerId/orders",requireApiKey, getCustomerOrders);
 
 // POST /customers - Thêm mới khách hàng
-r.post("/", createCustomer);
+r.post("/", requireApiKey, createCustomer);
 
 // DELETE /customers/:id - Xóa khách hàng
-r.delete("/:id", deleteCustomer);
+r.delete("/:id", requireApiKey, deleteCustomer);
 
 export default r;
