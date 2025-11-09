@@ -24,6 +24,7 @@ mongoose
     .catch((err) => console.error("MongoDB connecton error:", err));
 
 app.use("/auth", authRoutes);
+app.use("/", authRoutes)
 app.use("/customers", customerRoutes);
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
